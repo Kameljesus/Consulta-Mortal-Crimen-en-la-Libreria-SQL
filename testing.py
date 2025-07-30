@@ -3,9 +3,7 @@ from bs4 import BeautifulSoup
 import time
 
 base_url = "https://books.toscrape.com/"
-
-# Lista para guardar links fallidos (si alguno da error de conexión)
-fallidos = []
+fallidos = []  # Aquí guardamos los links que fallaron
 
 # Iteramos por las 50 páginas del catálogo
 for i in range(1, 51):  # páginas 1 a 50
@@ -13,24 +11,30 @@ for i in range(1, 51):  # páginas 1 a 50
     print(f"Procesando página {i}...")
     print()
     url = f"{base_url}catalogue/page-{i}.html"
-    response = requests.get(url)
-    soup = BeautifulSoup(response.text, 'html.parser')
 
-    libros = soup.find_all('article', class_='product_pod')
+    try:
+        response = requests.get(url)
+        soup = BeautifulSoup(response.text, 'html.parser')
+        libros = soup.find_all('article', class_='product_pod')
+    
+    except Exception as e:
+        print(f"❌ Falló la página {i}: {url} → {e}")
+        continue  # saltamos a la siguiente página
 
     for libro in libros:
-        try:
-            # Título
-            titulo = libro.h3.a['title']
-            
-            # Enlace a la página del libro
-            link = libro.h3.a['href']
-            # A veces los links son relativos (ej: '../../../...'), arreglamos eso:
-            link = link.replace('../../../', '')
-            url_libro = base_url + "catalogue/" + link
+        # Título
+        titulo = libro.h3.a['title']
+        
+        # Enlace a la página del libro
+        link = libro.h3.a['href']
+        # A veces los links son relativos (ej: '../../../...'), arreglamos eso:
+        link = link.replace('../../../', '')
+        url_libro = base_url + "catalogue/" + link
 
+        try: 
             # Entrar a la página del libro
-            r_libro = requests.get(url_libro)
+            r_libro = requests.get(url_libro, timeout=10)
+            r_libro.raise_for_status()
             soup_libro = BeautifulSoup(r_libro.text, 'html.parser')
 
             # Precio
@@ -46,9 +50,14 @@ for i in range(1, 51):  # páginas 1 a 50
 
             # También lo mostramos por consola
             print(f"{titulo} | {precio} | {categoria} | {calificacion} Stars")
-        
+            
         except Exception as e:
-            print(f"⚠️ Error con libro '{libro.h3.a['title']}': {e}")
-            fallidos.append(link)
+            print(f"❌ Falló: {titulo} → {e}")
+            fallidos.append(url_libro)
+            
+        time.sleep(10)  # pequeña pausa para no sobrecargar el servidor
 
-        time.sleep(0.1)  # pequeña pausa para no sobrecargar el servidor
+# Al final mostramos los fallidos
+print("\n🔁 Libros que fallaron:")
+for f in fallidos:
+    print(f)

@@ -29,3 +29,24 @@ Se usa principalmente para scraping de páginas web, cuando ya tenés el HTML y 
 # Cómo instalarlo?:
 
 pip install beautifulsoup4 requests
+
+
+# ¿Qué hace .raise_for_status()?
+
+Es un método de los objetos Response de requests que:
+
+    Lanza una excepción (HTTPError) si la respuesta HTTP tiene un código de error (4xx o 5xx).
+
+## ¿Por qué es útil?
+
+Porque no todos los errores se consideran fallos automáticamente en requests.get().
+
+Por ejemplo:
+
+    Si accedes a una página que no existe (404), requests.get(url) no lanza error por sí solo, simplemente te da una respuesta con status_code = 404.
+
+    Pero si haces:
+
+response.raise_for_status()
+
+entonces se lanza un error que puedes capturar en un try/except, como hicimos antes.
