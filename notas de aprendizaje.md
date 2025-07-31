@@ -50,3 +50,8 @@ Por ejemplo:
 response.raise_for_status()
 
 entonces se lanza un error que puedes capturar en un try/except, como hicimos antes.
+
+
+# Que es el pip freeze?
+
+Es las caracteristicas globales de tu entorno virtual.
