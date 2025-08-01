@@ -31,6 +31,31 @@ Se usa principalmente para scraping de páginas web, cuando ya tenés el HTML y 
 pip install beautifulsoup4 requests
 
 
+# Qué es y por qué html.parser?:
+
+indica qué motor de análisis (parser) debe usar BeautifulSoup para interpretar el HTML que se descargó.
+
+## ¿Qué es un parser?:
+
+Un parser es un programa que lee y comprende el código HTML, lo convierte en una estructura jerárquica (un árbol DOM) que podemos navegar y manipular fácilmente.
+
+En el caso de BeautifulSoup, podés elegir entre varios parsers, y 'html.parser' es uno de ellos.
+
+## ¿Qué significa 'html.parser'?:
+
+Es el parser HTML interno de Python. Viene incluido con la biblioteca estándar, por eso:
+
+✅ No requiere instalación adicional
+✅ Es bastante rápido
+✅ Es suficientemente bueno para la mayoría de las páginas simples como books.toscrape.com
+
+# ¿Qué pasa si no lo pongo?
+
+Si no especificás el parser, BeautifulSoup intentará adivinar cuál usar, pero puede lanzar una advertencia o elegir uno inesperado (por ejemplo, si tenés lxml instalado, lo usará).
+
+Es buena práctica siempre especificarlo, para que tu código sea más predecible.
+
+
 # ¿Qué hace .raise_for_status()?
 
 Es un método de los objetos Response de requests que:
