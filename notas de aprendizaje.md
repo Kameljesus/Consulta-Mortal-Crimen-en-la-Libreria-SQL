@@ -80,3 +80,43 @@ entonces se lanza un error que puedes capturar en un try/except, como hicimos an
 # Que es el pip freeze?
 
 Es las caracteristicas globales de tu entorno virtual.
+
+
+# Qué es un cursor para una base de datos?
+
+Es una herramienta que me permite dar comandos, hacer querys, editar, etc. A mi base de datos desde Python o un archivo de programación.
+
+
+# Qué es un índice en una base de datos?
+
+Un índice es una estructura que la base de datos crea sobre una o varias columnas de una tabla para acelerar las búsquedas y consultas.
+
+
+Piensa en él como el índice de un libro real:
+
+Si querés encontrar todas las páginas donde se menciona “SQLite”, no leés todo el libro línea por línea.
+Mirás el índice al final, que te dice exactamente en qué páginas aparece “SQLite”.
+
+
+En bases de datos, funciona igual:
+
+Sin índice: para buscar un autor en la tabla Autores, SQLite tendría que revisar fila por fila toda la tabla.
+Con índice: SQLite va directamente a los registros que coinciden con el valor buscado, mucho más rápido.
+
+
+Características de los índices
+
+Aceleran SELECT y JOIN: especialmente cuando buscás por columnas específicas o combinás tablas.
+No cambian los datos: solo crean una referencia.
+Ocupan espacio: cada índice extra requiere memoria y algo de almacenamiento.
+Impacto en INSERT/UPDATE/DELETE: cada vez que se modifica un dato indexado, el índice también se actualiza, lo que puede ralentizar un poco esas operaciones.
+
+
+En mi caso:
+
+Libros(Titulo) → índice acelera búsquedas por título.
+Autores(Nombre) → índice acelera búsquedas por autor.
+Libros_Autores(Libro_Id, Autor_Id) → índice acelera los JOIN entre libros y autores.
+
+
+💡 Tip: No conviene crear índices en columnas que se actualizan mucho, porque cada inserción o actualización también tiene que actualizar el índice. Pero para tu caso (base de datos de libros que no cambia demasiado seguido) está perfecto.
